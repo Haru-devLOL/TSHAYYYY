@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise d'anniversaire</title>
+    <style>
+        body {
+            background-color: pink;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            color: #FF69B4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 50px;
+            font-size: 3em;
+        }
+
+        .gift {
+            margin-top: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .gift:hover {
+            transform: scale(1.1);
+        }
+
+        .message {
+            font-size: 2em;
+            color: #FF1493;
+            display: none;
+            margin-top: 20px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <h1>J'AI UNE SURPRISE POUR TOI MA POTE TSHAYYYY ✨️✨️</h1>
+    <p>Clique sur le cadeau</p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Gift_icon.svg/512px-Gift_icon.svg.png" alt="Cadeau" class="gift" id="gift" width="200">
+    <div class="message" id="message">JOYEUX ANNIVERSAIRE MA GURL ! T'ES LA BESTT 💝😻😻</div>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+        const gift = document.getElementById('gift');
+        const message = document.getElementById('message');
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        let colors = ['#FF69B4', '#FFD700', '#FF4500', '#7CFC00', '#1E90FF'];
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 6 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    dx: Math.random() * 4 - 2,
+                    dy: Math.random() * 4 + 1,
+                });
+            }
+        }
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, false);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+        }
+
+        function updateConfetti() {
+            particles.forEach((p) => {
+                p.x += p.dx;
+                p.y += p.dy;
+
+                if (p.y > canvas.height) {
+                    p.y = -10;
+                }
+            });
+        }
+
+        function animateConfetti() {
+            drawConfetti();
+            updateConfetti();
+            requestAnimationFrame(animateConfetti);
+        }
+
+        gift.addEventListener('click', () => {
+            gift.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Open_box_icon.svg/512px-Open_box_icon.svg.png";
+            message.style.display = "block";
+            createConfetti();
+            animateConfetti();
+        });
+    </script>
+</body>
+</html>
